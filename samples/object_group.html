@@ -1,76 +1,134 @@
-<!doctype html>
-<html>
-  <head>
-    <meta charset="utf-8" />
-    <script type="importmap">
-      {
-        "imports": {
-          "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js"
-        }
-      }
-    </script>
-    <script type="module">
-      import * as THREE from "three";
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <title>yukidaruma</title>
 
-      // サイズを指定
-      const width = 960;
-      const height = 540;
+  <!-- three.jsを読み込む(ローカル) -->
+  <!-- <script src="./three.js"></script> -->
+  <!-- three.jsを読み込む(CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/99/three.min.js"></script>
 
-      // レンダラーを作成
-      const renderer = new THREE.WebGLRenderer({
-        canvas: document.querySelector("#myCanvas"),
-      });
-      renderer.setPixelRatio(window.devicePixelRatio);
-      renderer.setSize(width, height);
+</head>
+<body>
+ <script>
+  var init = function() {
 
-      // シーンを作成
-      const scene = new THREE.Scene();
+    var width = 800,
+        height = 600;
+  
+    // レンダラーを作成
+    var renderer = new THREE.WebGLRenderer();
+    renderer.setSize(width, height);
+    document.body.appendChild(renderer.domElement);
+  
+    // シーンを作成
+    var scene = new THREE.Scene();
+  
+    // カメラを作成
+    var camera = new THREE.PerspectiveCamera(45, width / height, 1, 1000);
+// グループを作る
+const group = new THREE.Group();
+// 3D空間にグループを追加する
+scene.add(group);  
 
-      // カメラを作成
-      const camera = new THREE.PerspectiveCamera(45, width / height);
-      camera.position.set(-100, 150, 500);
-      camera.lookAt(new THREE.Vector3(0, 0, 0));
+//角柱〜円柱,目
+var cylinderGeometry = new THREE.CylinderGeometry( 0.1, 0.1, 0.1, 360 );
+//上の底面の半径、下の底面の半径、高さ、何角柱か
+var cylinderMaterial = new THREE.MeshPhongMaterial( {color: 0xaa2222} );
+var cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
+cylinder.position.set( 0.7, 1.9, -9.6 );
+cylinder.rotateZ(1.8);
+group.add( cylinder );
+//角柱〜円柱,目
+var cylinderGeometry = new THREE.CylinderGeometry( 0.1, 0.1, 0.1, 360 );
+//上の底面の半径、下の底面の半径、高さ、何角柱か
+var cylinderMaterial = new THREE.MeshPhongMaterial( {color: 0xaa2222} );
+var cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
+cylinder.position.set( 0.7, 1.9, -10.4 );
+cylinder.rotateY(1.8);
+group.add( cylinder );
+//角柱〜円柱,鼻
+var cylinderGeometry = new THREE.CylinderGeometry( 0.1, 0.1, 1, 360 );
+//上の底面の半径、下の底面の半径、高さ、何角柱か
+var cylinderMaterial = new THREE.MeshPhongMaterial( {color: 0xaa2222} );
+var cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
+cylinder.position.set( 0.7, 1.9, -10.4 );
+cylinder.rotateZ(1.4);
+group.add( cylinder );
+//角柱〜円柱,腕
+var cylinderGeometry = new THREE.CylinderGeometry( 0.05, 0.05, 2, 360 );
+//上の底面の半径、下の底面の半径、高さ、何角柱か
+var cylinderMaterial = new THREE.MeshPhongMaterial( {color: 0xaa2222} );
+var cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
+cylinder.position.set( 0.7, 0.6, -9 );
+cylinder.rotateX(10);
+cylinder.rotateY(0);
+cylinder.rotateZ(-2);
+group.add( cylinder );
+//角柱〜円柱,腕
+var cylinderGeometry = new THREE.CylinderGeometry( 0.05, 0.05, 2, 360 );
+//上の底面の半径、下の底面の半径、高さ、何角柱か
+var cylinderMaterial = new THREE.MeshPhongMaterial( {color: 0xaa2222} );
+var cylinder = new THREE.Mesh( cylinderGeometry, cylinderMaterial );
+cylinder.position.set( 0.7, 0.6, -11 );
+cylinder.rotateX(-10);
+cylinder.rotateY(0);
+cylinder.rotateZ(-2);
+group.add( cylinder );
+// 平面を作成
+var geometry = new THREE.PlaneGeometry( 50, 50, 1 );
+    var material = new THREE.MeshPhongMaterial( {color: 0xfff77f, side: THREE.DoubleSide} );
+    var plane = new THREE.Mesh( geometry, material );
+    plane.position.z = -15;
+    scene.add( plane );
+    
+//球
+var sphereGeometry = new THREE.SphereGeometry( 1, 360, 360 ); 
+//半径、垂直方向の分割数、水平方向の分割数
+var sphereMaterial = new THREE. MeshStandardMaterial( {color: 0xffffff,wireframe: true} );
+var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+sphere.position.set( 0, 0, -10 );
+group.add( sphere );
+//球
+var sphereGeometry = new THREE.SphereGeometry( 0.8, 360, 360 ); 
+//半径、垂直方向の分割数、水平方向の分割数
+var sphereMaterial = new THREE. MeshStandardMaterial( {color: 0xffffff,wireframe: true} );
+var sphere = new THREE.Mesh( sphereGeometry, sphereMaterial );
+sphere.position.set( 0, 1.6, -10 );
+group.add( sphere );
 
-      // 地面を作成
-      scene.add(new THREE.GridHelper(600));
-      scene.add(new THREE.AxesHelper(300));
-
-      // グループを作る
-      const group = new THREE.Group();
-      // 3D空間にグループを追加する
-      scene.add(group);
-
-      for (let i = 0; i < 10; i++) {
-        // 直方体を作成
-        const material = new THREE.MeshNormalMaterial();
-        const geometry = new THREE.SphereGeometry(30, 30, 30);
-        const mesh = new THREE.Mesh(geometry, material);
-
-        // 配置座標を計算
-        const radian = (i / 10) * Math.PI * 2;
-        mesh.position.set(
-          200 * Math.cos(radian), // X座標
-          30, // Y座標
-          200 * Math.sin(radian), // Z座標
-        );
-
-        // グループに追加する
-        group.add(mesh);
-      }
-
-      tick();
-
-      // 毎フレーム時に実行されるループイベントです
-      function tick() {
-        group.rotation.y += 0.01;
-
-        // レンダリング
-        renderer.render(scene, camera);
-        requestAnimationFrame(tick);
-      }
-    </script>
-  </head>
-  <body>
-    <canvas id="myCanvas"></canvas>
-  </body>
+    // 平行光源1
+    var directionalLight1 = new THREE.DirectionalLight(0xffffff);
+    directionalLight1.position.set(1, 1, 1);
+    // シーンに追加
+    scene.add(directionalLight1);
+    // 平行光源2
+        var directionalLight2 = new THREE.DirectionalLight(0xffffff);
+    directionalLight2.position.set(-1, 1, 1);
+    // シーンに追加
+    scene.add(directionalLight2);
+  
+    // 初回実行
+    var update = function() {
+      requestAnimationFrame(update);
+  
+  
+      // 箱を回転させる
+      //box.rotation.x += 0.01;
+      //box.rotation.y += 0.01;
+      //plane.rotation.x += 0.01;
+      //plane.rotation.y += 0.01;
+      group.rotation.x += 0.01;
+      //group.rotation.y += 0.01;
+      group.rotation.z += 0.01;
+       
+  
+      renderer.render(scene, camera);
+    };
+    update();
+  }
+  window.addEventListener('DOMContentLoaded', init);
+</script>
+</body>
 </html>
